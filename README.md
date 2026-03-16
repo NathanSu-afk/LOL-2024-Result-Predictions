@@ -242,7 +242,8 @@ The final model uses `baron_diff` and `dragon_diff` as two of its three features
  
 To investigate this, a fairness analysis was conducted comparing model accuracy for **Group X (Blue side teams)** versus **Group Y (Red side teams)**. Accuracy is appropriate here because an equal number of biased features were used in determining the outcome of the match. Even though barons seem to be more important than dragons, dragons still contribute a decent amount in determining the outcome of the game and this inherent disadvantage is already reflected in the tests we did above, accurately representing game design.
  
-**Null Hypothesis**: The model is fair, meaning its accuracy for Blue side teams and Red side teams is roughly the same, and any observed difference is due to random chance. The **Alternative Hypothesis**: The model is unfair, meaning its accuracy for Blue side teams is higher than for Red side teams. 
+**Null Hypothesis**: The model is fair, meaning its accuracy for Blue side teams and Red side teams is roughly the same, and any observed difference is due to random chance. 
+**Alternative Hypothesis**: The model is unfair, meaning its accuracy for Blue side teams is higher than for Red side teams. 
 
 The **test statistic** is the difference in accuracy (Blue accuracy − Red accuracy), where a positive value means the model is more accurate for Blue side. A **significance level of 0.05** was used.
 
