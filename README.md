@@ -131,7 +131,6 @@ To formally test missingness, `golddiffat25` was selected as the column to analy
 **Does the missingness of `golddiffat25` depend on `side`?**
 
 **Null Hypothesis**: The distribution of `side` when `golddiffat25` is missing is the same as when it is not missing.
-
 **Alternative Hypothesis**: The distribution of `side` when `golddiffat25` is missing is not the same as when it is not missing.
 
 After running the permutation test, the observed TVD came out to 0.0000 with a p-value of 1.0000. We fail to reject the null hypothesis, meaning the missingness of `golddiffat25` does **not** depend on `side`. This makes sense because both Blue and Red side play the same number of games, and a game ending before 25 minutes is not inherently tied to which side won. The missing values are perfectly split between Blue and Red.
@@ -153,7 +152,6 @@ After running the permutation test, the observed TVD came out to 0.0000 with a p
 **Does the missingness of `golddiffat25` depend on `league`?**
  
 **Null Hypothesis**: The distribution of `league` when `golddiffat25` is missing is the same as when it is not missing. 
-
 **Alternative Hypothesis**: The distribution of `league` when `golddiffat25` is missing is not the same as when it is not missing.
 
 After running the permutation test, the observed TVD came out to 0.3310 with a p-value of 0.0000. We reject the null hypothesis, meaning the missingness of `golddiffat25` **does** depend on `league`. Looking at the data, leagues like PCL, ESLOL, and PRMP account for a disproportionate share of missing values. These tend to be more regional or developing leagues where games may end earlier on average, or where data collection practices differ slightly. This confirms that `golddiffat25` is MAR (Missing At Random) with respect to `league`, where its missingness can be partially explained by which league the game was played in.
@@ -179,7 +177,6 @@ After running the permutation test, the observed TVD came out to 0.3310 with a p
 The goal of this hypothesis test is to determine whether the observed win rate difference between Blue and Red side is statistically significant, or if it could have just as easily occurred by chance.
 
 **Null Hypothesis**: The probability of winning is the same for both the Blue side and the Red side, and any observed difference in win rate is due to random chance. 
-
 **Alternative Hypothesis**: The probability of winning is higher for the Blue side than for the Red side.
 
 The **test statistic** chosen is the difference in win rates between Blue side and Red side (Blue win rate − Red win rate). This is a good choice because it directly measures the quantity we care about, which is how much more often Blue wins, and it is easy to interpret. A **significance level of 0.05** was used.
@@ -219,7 +216,7 @@ The baseline model is a **Random Forest Classifier** implemented in a single `sk
  
 `GridSearchCV` with 5-fold cross-validation was used to find the best `max_depth` from the values [2, 4, 5, 6, 7, 9, 10]. The best `max_depth` was **7**, with a best CV accuracy of **0.8513** and a test accuracy of **0.8491**.
  
-For a two-feature model, 84.9% test accuracy is a great starting point. Permutation importance tests confirmed that `golddiffat25` is by far the more important feature because shuffling it caused accuracy to drop all the way to **58.96%**, essentially near chance. Shuffling `firstbaron` only dropped accuracy to **79.27%**, meaning it adds value but is largely secondary to gold advantage, possibly being overshadowed. This makes sense because gold difference captures a broad picture of who is winning across the whole game, while first baron is just one binary event and is also somewhat tied to golddiff because it gives the team buffs and more gold.
+For a two-feature model, 84.9% test accuracy is a great starting point. Also, there is generally still a lot of game left to be played after 25 minutes so it is a good prediction score to have when true late-game is not accounted for. Permutation importance tests confirmed that `golddiffat25` is by far the more important feature because shuffling it caused accuracy to drop all the way to **58.96%**, essentially near chance. Shuffling `firstbaron` only dropped accuracy to **79.27%**, meaning it adds value but is largely secondary to gold advantage, possibly being overshadowed. This makes sense because gold difference captures a broad picture of who is winning across the whole game, while first baron is just one binary event and is also somewhat tied to golddiff because it gives the team buffs and more gold.
  
 ---
  
@@ -246,7 +243,6 @@ The final model uses `baron_diff` and `dragon_diff` as two of its three features
 To investigate this, a fairness analysis was conducted comparing model accuracy for **Group X (Blue side teams)** versus **Group Y (Red side teams)**. Accuracy is appropriate here because an equal number of biased features were used in determining the outcome of the match. Even though barons seem to be more important than dragons, dragons still contribute a decent amount in determining the outcome of the game and this inherent disadvantage is already reflected in the tests we did above, accurately representing game design.
  
 **Null Hypothesis**: The model is fair, meaning its accuracy for Blue side teams and Red side teams is roughly the same, and any observed difference is due to random chance. 
-
 **Alternative Hypothesis**: The model is unfair, meaning its accuracy for Blue side teams is higher than for Red side teams. 
 
 The **test statistic** is the difference in accuracy (Blue accuracy − Red accuracy), where a positive value means the model is more accurate for Blue side. A **significance level of 0.05** was used.
